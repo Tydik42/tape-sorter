@@ -1,4 +1,5 @@
 #include "tape_config.h"
+
 #include <algorithm>
 #include <array>
 #include <fstream>
@@ -50,7 +51,7 @@ constexpr bool ConfigParser::isValidKey(std::string const& key) noexcept {
 }
 
 void ConfigParser::setDelay(TapeDelays& delays, std::string const& key,
-                     std::chrono::milliseconds const& value) {
+                            std::chrono::milliseconds const& value) {
     if (key == "read_delay") delays.read_delay_ms_ = value;
     if (key == "write_delay") delays.write_delay_ms_ = value;
     if (key == "rewind_delay") delays.rewind_delay_ms_ = value;
