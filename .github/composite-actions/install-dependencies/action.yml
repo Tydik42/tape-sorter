@@ -1,0 +1,58 @@
+name: 'Install C++ Dependencies'
+description: 'Install compiler, gtest and tools (clang-format/clang-tidy)'
+inputs:
+  os:
+    description: 'OS type (linux/macos/windows)'
+    required: true
+    default: 'linux'
+  install-linters:
+    description: 'Install clang-format/clang-tidy'
+    required: false
+    default: 'false'
+  install-gtest:
+    description: 'Install Google Test'
+    required: false
+    default: 'false'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install Linux dependencies
+      if: inputs.os == 'linux'
+      shell: bash
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y g++ build-essential
+        if [ "${{ inputs.install-linters }}" == "true" ]; then
+          sudo apt-get install -y clang-format clang-tidy
+        fi
+        if [ "${{ inputs.install-gtest }}" == "true" ]; then
+          sudo apt-get install -y libgtest-dev
+          cd /usr/src/gtest
+          sudo cmake .
+          sudo make
+          sudo cp lib/*.a /usr/lib
+        fi
+
+    - name: Install macOS dependencies
+      if: inputs.os == 'macos'
+      shell: bash
+      run: |
+        brew install llvm
+        if [ "${{ inputs.install-linters }}" == "true" ]; then
+          echo "$(brew --prefix llvm)/bin" >> $GITHUB_PATH
+        fi
+        if [ "${{ inputs.install-gtest }}" == "true" ]; then
+          brew install googletest
+        fi
+
+    - name: Install Windows dependencies
+      if: inputs.os == 'windows'
+      shell: bash
+      run: |
+        if [ "${{ inputs.install-linters }}" == "true" ]; then
+          choco install llvm --yes
+        fi
+        if [ "${{ inputs.install-gtest }}" == "true" ]; then
+          choco install gtest --yes
+        fi
