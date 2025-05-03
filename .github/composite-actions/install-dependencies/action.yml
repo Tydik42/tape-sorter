@@ -26,13 +26,6 @@ runs:
         if [ "${{ inputs.install-linters }}" == "true" ]; then
           sudo apt-get install -y clang-format clang-tidy
         fi
-        if [ "${{ inputs.install-gtest }}" == "true" ]; then
-          sudo apt-get install -y libgtest-dev
-          cd /usr/src/gtest
-          sudo cmake .
-          sudo make
-          sudo cp lib/*.a /usr/lib
-        fi
 
     - name: Install macOS dependencies
       if: inputs.os == 'macos'
@@ -42,9 +35,6 @@ runs:
         if [ "${{ inputs.install-linters }}" == "true" ]; then
           echo "$(brew --prefix llvm)/bin" >> $GITHUB_PATH
         fi
-        if [ "${{ inputs.install-gtest }}" == "true" ]; then
-          brew install googletest
-        fi
 
     - name: Install Windows dependencies
       if: inputs.os == 'windows'
@@ -52,7 +42,4 @@ runs:
       run: |
         if [ "${{ inputs.install-linters }}" == "true" ]; then
           choco install llvm --yes
-        fi
-        if [ "${{ inputs.install-gtest }}" == "true" ]; then
-          choco install gtest --yes
         fi
