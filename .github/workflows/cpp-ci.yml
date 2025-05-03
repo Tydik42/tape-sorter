@@ -17,14 +17,15 @@ jobs:
 
       - name: Run clang-format
         run: |
-          find src include -name "*.h" -o -name "*.cpp" | xargs clang-format --dry-run --Werror
+          find core -name "*.h" -o -name "*.cpp" | xargs clang-format --dry-run --Werror
+          clang-format --dry-run --Werror main.cpp
 
       - name: Run clang-tidy
         run: |
           mkdir -p build && cd build
           cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON ..
           cd ..
-          run-clang-tidy -checks='-*,modernize-*,performance-*' -warnings-as-errors='*'
+          run-clang-tidy -p build
 
   build:
     name: Build (${{ matrix.os }})
@@ -37,14 +38,13 @@ jobs:
       - uses: ./.github/composite-actions/install-dependencies
         with:
           os: ${{ matrix.os == 'windows-latest' && 'windows' || (matrix.os == 'macos-latest' && 'macos' || 'linux') }}
-          install-gtest: 'true'
 
       - name: Configure CMake
         shell: bash
         run: |
           mkdir -p build
           cd build
-          cmake -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTS=ON ..
+          cmake -DCMAKE_BUILD_TYPE=Debug -DENABLE_TESTS=ON ..
 
       - name: Build
         shell: bash
@@ -60,10 +60,21 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v3
+      - uses: ./.github/composite-actions/install-dependencies
         with:
-          name: build-${{ matrix.os }}
-          path: build
+          os: ${{ matrix.os == 'windows-latest' && 'windows' || (matrix.os == 'macos-latest' && 'macos' || 'linux') }}
+
+      - name: Configure CMake
+        shell: bash
+        run: |
+          mkdir -p build
+          cd build
+          cmake -DCMAKE_BUILD_TYPE=Debug -DENABLE_TESTS=ON ..
+
+      - name: Build
+        shell: bash
+        working-directory: ./build
+        run: cmake --build . --config Debug
 
       - name: Run tests
         shell: bash

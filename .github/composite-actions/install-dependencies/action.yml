@@ -9,10 +9,6 @@ inputs:
     description: 'Install clang-format/clang-tidy'
     required: false
     default: 'false'
-  install-gtest:
-    description: 'Install Google Test'
-    required: false
-    default: 'false'
 
 runs:
   using: "composite"
