@@ -1,0 +1,15 @@
+BasedOnStyle: Google
+AccessModifierOffset: -4
+TabWidth: 4
+IndentWidth: 4
+ContinuationIndentWidth: 8
+ColumnLimit: 100
+AllowShortFunctionsOnASingleLine: Empty
+IncludeCategories:
+  - Regex: '<.+>'
+    Priority: 1
+  - Regex: '.+'
+    Priority: 2
+QualifierAlignment: Custom
+QualifierOrder: ['inline', 'static', 'type', 'const', 'volatile' ]
+SeparateDefinitionBlocks: Always
