@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include <vector>
 
 #include "i_tape.h"
 #include "tape_config.h"
