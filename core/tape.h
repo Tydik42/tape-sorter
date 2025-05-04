@@ -16,7 +16,8 @@ private:
     void updatePosition();
     void scanPositions();
 
-    public : Tape(std::string const& file_path, TapeDelays const& delays);
+public:
+    Tape(std::string const& file_path, TapeDelays const& delays);
 
     int32_t read(int32_t& value) override;
     void write(int32_t value) override;
