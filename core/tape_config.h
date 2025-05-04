@@ -7,16 +7,16 @@ struct TapeDelays {
     std::chrono::milliseconds read_delay_ms_;
     std::chrono::milliseconds write_delay_ms_;
     std::chrono::milliseconds rewind_delay_ms_;
-    std::chrono::milliseconds shift_delay_ms_;
+    std::chrono::milliseconds move_delay_ms_;
 
     constexpr TapeDelays(std::chrono::milliseconds read = std::chrono::milliseconds(0),
                          std::chrono::milliseconds write = std::chrono::milliseconds(0),
                          std::chrono::milliseconds rewind = std::chrono::milliseconds(0),
-                         std::chrono::milliseconds shift = std::chrono::milliseconds(0))
+                         std::chrono::milliseconds move = std::chrono::milliseconds(0))
         : read_delay_ms_(read),
           write_delay_ms_(write),
           rewind_delay_ms_(rewind),
-          shift_delay_ms_(shift) {}
+          move_delay_ms_(move) {}
 };
 
 class ConfigParser {

@@ -7,7 +7,7 @@
 
 namespace {
 constexpr std::array<char const*, 4> kValidKeys = {"read_delay", "write_delay", "rewind_delay",
-                                                   "shift_delay"};
+                                                   "move_delay"};
 }  // namespace
 
 TapeDelays ConfigParser::parse(std::string const& config_path) {
@@ -55,5 +55,5 @@ void ConfigParser::setDelay(TapeDelays& delays, std::string const& key,
     if (key == "read_delay") delays.read_delay_ms_ = value;
     if (key == "write_delay") delays.write_delay_ms_ = value;
     if (key == "rewind_delay") delays.rewind_delay_ms_ = value;
-    if (key == "shift_delay") delays.shift_delay_ms_ = value;
+    if (key == "move_delay") delays.move_delay_ms_ = value;
 }

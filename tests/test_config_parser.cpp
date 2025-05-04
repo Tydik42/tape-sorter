@@ -29,7 +29,7 @@ TEST_F(ConfigParserTest, ParsesValidConfig) {
         "read_delay=100\n"
         "write_delay=200\n"
         "rewind_delay=300\n"
-        "shift_delay=400\n";
+        "move_delay=400\n";
     
     auto filename = createTempConfigFile(config);
     auto delays = ConfigParser::parse(filename);
@@ -37,7 +37,7 @@ TEST_F(ConfigParserTest, ParsesValidConfig) {
     EXPECT_EQ(delays.read_delay_ms_.count(), 100);
     EXPECT_EQ(delays.write_delay_ms_.count(), 200);
     EXPECT_EQ(delays.rewind_delay_ms_.count(), 300);
-    EXPECT_EQ(delays.shift_delay_ms_.count(), 400);
+    EXPECT_EQ(delays.move_delay_ms_.count(), 400);
 }
 
 TEST_F(ConfigParserTest, ParsesPartialConfig) {
@@ -49,7 +49,7 @@ TEST_F(ConfigParserTest, ParsesPartialConfig) {
     EXPECT_EQ(delays.read_delay_ms_.count(), 100);
     EXPECT_EQ(delays.write_delay_ms_.count(), 200);
     EXPECT_EQ(delays.rewind_delay_ms_.count(), 0);
-    EXPECT_EQ(delays.shift_delay_ms_.count(), 0);
+    EXPECT_EQ(delays.move_delay_ms_.count(), 0);
 }
 
 TEST_F(ConfigParserTest, HandlesCommentsAndWhitespace) {
