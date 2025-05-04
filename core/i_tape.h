@@ -2,14 +2,14 @@
 #include <chrono>
 #include <cstdint>
 
-enum class MoveDirection { Forward, Backward };
+enum class MoveDirection { kForward, kBackward };
 
 class ITape {
 public:
     virtual ~ITape() = default;
 
-    virtual int32_t read(int32_t& value) = 0;
-    virtual void write(int32_t value) = 0;
-    virtual void move(MoveDirection direction) = 0;
-    virtual void rewind() = 0;
+    virtual int32_t Read(int32_t& value) = 0;
+    virtual void Write(int32_t value) = 0;
+    virtual void Move(MoveDirection direction) = 0;
+    virtual void Rewind() = 0;
 };

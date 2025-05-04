@@ -14,7 +14,7 @@ void Tape::UpdatePosition() {
     tape_file_.seekp(current_position_);
 }
 
-int32_t Tape::read(int32_t& value) {
+int32_t Tape::Read(int32_t& value) {
     std::this_thread::sleep_for(delays_.read_delay_ms_);
     if (!tape_file_.is_open()) {
         throw std::runtime_error("File is not open");
@@ -30,7 +30,7 @@ int32_t Tape::read(int32_t& value) {
     return value;
 }
 
-void Tape::write(int32_t value) {
+void Tape::Write(int32_t value) {
     std::this_thread::sleep_for(delays_.write_delay_ms_);
     if (!tape_file_.is_open()) {
         throw std::runtime_error("File is not open");
@@ -45,16 +45,16 @@ void Tape::write(int32_t value) {
     UpdatePosition();
 }
 
-void Tape::rewind() {
+void Tape::Rewind() {
     std::this_thread::sleep_for(delays_.rewind_delay_ms_);
     tape_file_.clear();
     current_position_ = 0;
     UpdatePosition();
 }
 
-void Tape::move(MoveDirection direction) {
+void Tape::Move(MoveDirection direction) {
     std::this_thread::sleep_for(delays_.move_delay_ms_);
-    std::streamoff const shift = (direction == MoveDirection::Forward)
+    std::streamoff const shift = (direction == MoveDirection::kForward)
                                          ? static_cast<std::streamoff>(sizeof(int32_t))
                                          : -static_cast<std::streamoff>(sizeof(int32_t));
     std::streampos const new_position = current_position_ + shift;

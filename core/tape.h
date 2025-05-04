@@ -18,8 +18,8 @@ private:
 public:
     Tape(std::string const& file_name, TapeDelays const& delays);
 
-    int32_t read(int32_t& value) override;
-    void write(int32_t value) override;
-    void move(MoveDirection direction) override;
-    void rewind() override;
+    int32_t Read(int32_t& value) override;
+    void Write(int32_t value) override;
+    void Move(MoveDirection direction) override;
+    void Rewind() override;
 };
