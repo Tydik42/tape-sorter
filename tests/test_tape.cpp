@@ -55,39 +55,39 @@ TEST_F(TapeTest, Read) {
     Tape tape(test_file_, delays_);
 
     int32_t value;
-    tape.read(value);
+    tape.Read(value);
     EXPECT_EQ(value, 42);
 
-    tape.move(MoveDirection::Forward);
-    tape.read(value);
+    tape.Move(MoveDirection::kForward);
+    tape.Read(value);
     EXPECT_EQ(value, 99);
 
-    tape.move(MoveDirection::Forward);
-    tape.read(value);
+    tape.Move(MoveDirection::kForward);
+    tape.Read(value);
     EXPECT_EQ(value, 123);
 }
 
 TEST_F(TapeTest, Write) {
     Tape tape(test_file_, delays_);
 
-    tape.write(100);
-    tape.move(MoveDirection::Forward);
-    tape.write(200);
-    tape.move(MoveDirection::Forward);
-    tape.write(300);
+    tape.Write(100);
+    tape.Move(MoveDirection::kForward);
+    tape.Write(200);
+    tape.Move(MoveDirection::kForward);
+    tape.Write(300);
 
-    tape.rewind();
+    tape.Rewind();
 
     int32_t value;
-    tape.read(value);
+    tape.Read(value);
     EXPECT_EQ(value, 100);
 
-    tape.move(MoveDirection::Forward);
-    tape.read(value);
+    tape.Move(MoveDirection::kForward);
+    tape.Read(value);
     EXPECT_EQ(value, 200);
 
-    tape.move(MoveDirection::Forward);
-    tape.read(value);
+    tape.Move(MoveDirection::kForward);
+    tape.Read(value);
     EXPECT_EQ(value, 300);
 }
 
@@ -97,15 +97,15 @@ TEST_F(TapeTest, Rewind) {
 
     Tape tape(test_file_, delays_);
 
-    tape.move(MoveDirection::Forward);
-    tape.move(MoveDirection::Forward);
+    tape.Move(MoveDirection::kForward);
+    tape.Move(MoveDirection::kForward);
 
     int32_t value;
-    tape.read(value);
+    tape.Read(value);
     EXPECT_EQ(value, 33);
 
-    tape.rewind();
-    tape.read(value);
+    tape.Rewind();
+    tape.Read(value);
     EXPECT_EQ(value, 11);
 }
 
@@ -116,11 +116,11 @@ TEST_F(TapeTest, MoveForward) {
     Tape tape(test_file_, delays_);
 
     int32_t value;
-    tape.read(value);
+    tape.Read(value);
     EXPECT_EQ(value, 10);
 
-    tape.move(MoveDirection::Forward);
-    tape.read(value);
+    tape.Move(MoveDirection::kForward);
+    tape.Read(value);
     EXPECT_EQ(value, 20);
 }
 
@@ -130,15 +130,15 @@ TEST_F(TapeTest, MoveBackward) {
 
     Tape tape(test_file_, delays_);
 
-    tape.move(MoveDirection::Forward);
-    tape.move(MoveDirection::Forward);
+    tape.Move(MoveDirection::kForward);
+    tape.Move(MoveDirection::kForward);
 
     int32_t value;
-    tape.read(value);
+    tape.Read(value);
     EXPECT_EQ(value, 30);
 
-    tape.move(MoveDirection::Backward);
-    tape.read(value);
+    tape.Move(MoveDirection::kBackward);
+    tape.Read(value);
     EXPECT_EQ(value, 20);
 }
 
@@ -146,7 +146,7 @@ TEST_F(TapeTest, MoveBackwardOutOfBounds) {
     Tape tape(test_file_, delays_);
 
     EXPECT_THROW({
-        tape.move(MoveDirection::Backward);
+        tape.Move(MoveDirection::kBackward);
     }, std::out_of_range);
 }
 
@@ -154,7 +154,7 @@ TEST_F(TapeTest, MoveForwardOutOfBounds) {
     Tape tape(test_file_, delays_);
 
     EXPECT_THROW({
-        tape.move(MoveDirection::Forward);
+        tape.Move(MoveDirection::kForward);
     }, std::out_of_range);
 }
 
@@ -165,8 +165,8 @@ TEST_F(TapeTest, DelaysAreApplied) {
     Tape tape(test_file_, delays_);
 
     int32_t value = 42;
-    tape.write(value);
-    tape.read(value);
+    tape.Write(value);
+    tape.Read(value);
 
     SUCCEED();
 }
