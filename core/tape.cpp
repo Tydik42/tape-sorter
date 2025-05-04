@@ -9,7 +9,7 @@ Tape::Tape(std::string const& file_name, TapeDelays const& delays)
     current_position_ = tape_file_.tellg();
 }
 
-void Tape::updatePosition() {
+void Tape::UpdatePosition() {
     tape_file_.seekg(current_position_);
     tape_file_.seekp(current_position_);
 }
@@ -26,7 +26,7 @@ int32_t Tape::read(int32_t& value) {
         throw std::runtime_error("Failed to read from file");
     }
 
-    updatePosition();
+    UpdatePosition();
     return value;
 }
 
@@ -42,20 +42,21 @@ void Tape::write(int32_t value) {
         throw std::runtime_error("Failed to write to file");
     }
 
-    updatePosition();
+    UpdatePosition();
 }
 
 void Tape::rewind() {
     std::this_thread::sleep_for(delays_.rewind_delay_ms_);
     tape_file_.clear();
     current_position_ = 0;
-    updatePosition();
+    UpdatePosition();
 }
 
 void Tape::move(MoveDirection direction) {
     std::this_thread::sleep_for(delays_.move_delay_ms_);
-    std::streamoff const shift =
-            (direction == MoveDirection::Forward) ? sizeof(int32_t) : -sizeof(int32_t);
+    std::streamoff const shift = (direction == MoveDirection::Forward)
+                                         ? static_cast<std::streamoff>(sizeof(int32_t))
+                                         : -static_cast<std::streamoff>(sizeof(int32_t));
     std::streampos const new_position = current_position_ + shift;
 
     if (new_position < 0) {
@@ -69,5 +70,5 @@ void Tape::move(MoveDirection direction) {
     }
 
     current_position_ = new_position;
-    updatePosition();
+    UpdatePosition();
 }

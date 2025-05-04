@@ -13,11 +13,10 @@ private:
     TapeDelays delays_;
     std::vector<std::streampos> positions_;
 
-    void updatePosition();
-    void scanPositions();
+    void UpdatePosition();
 
 public:
-    Tape(std::string const& file_path, TapeDelays const& delays);
+    Tape(std::string const& file_name, TapeDelays const& delays);
 
     int32_t read(int32_t& value) override;
     void write(int32_t value) override;
