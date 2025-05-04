@@ -13,6 +13,7 @@ set(TEST_TARGET_NAME ${PROJECT_NAME}-test)
 
 set(TEST_SOURCES
         test_config_parser.cpp
+        test_tape.cpp
 )
 
 add_executable(${TEST_TARGET_NAME} ${TEST_SOURCES})
