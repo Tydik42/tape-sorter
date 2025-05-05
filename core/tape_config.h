@@ -10,9 +10,9 @@ struct TapeDelays {
     std::chrono::milliseconds move_delay_ms_;
 
     constexpr explicit TapeDelays(std::chrono::milliseconds read = std::chrono::milliseconds(0),
-                         std::chrono::milliseconds write = std::chrono::milliseconds(0),
-                         std::chrono::milliseconds rewind = std::chrono::milliseconds(0),
-                         std::chrono::milliseconds move = std::chrono::milliseconds(0))
+                                  std::chrono::milliseconds write = std::chrono::milliseconds(0),
+                                  std::chrono::milliseconds rewind = std::chrono::milliseconds(0),
+                                  std::chrono::milliseconds move = std::chrono::milliseconds(0))
         : read_delay_ms_(read),
           write_delay_ms_(write),
           rewind_delay_ms_(rewind),

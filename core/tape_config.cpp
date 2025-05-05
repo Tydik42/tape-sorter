@@ -46,8 +46,7 @@ TapeDelays ConfigParser::Parse(std::string const& config_path) {
 }
 
 constexpr bool ConfigParser::IsValidKey(std::string const& key) noexcept {
-    return std::ranges::any_of(kValidKeys,
-                               [&key](char const* valid) { return key == valid; });
+    return std::ranges::any_of(kValidKeys, [&key](char const* valid) { return key == valid; });
 }
 
 void ConfigParser::SetDelay(TapeDelays& delays, std::string const& key,
