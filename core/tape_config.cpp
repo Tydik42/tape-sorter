@@ -10,7 +10,7 @@ constexpr std::array<char const*, 4> kValidKeys = {"read_delay", "write_delay", 
                                                    "move_delay"};
 }  // namespace
 
-TapeDelays ConfigParser::parse(std::string const& config_path) {
+TapeDelays ConfigParser::Parse(std::string const& config_path) {
     std::ifstream file(config_path);
     if (!file) throw std::runtime_error("Config file not found: " + config_path);
 
@@ -20,7 +20,7 @@ TapeDelays ConfigParser::parse(std::string const& config_path) {
 
     while (std::getline(file, line)) {
         line_num++;
-        line.erase(std::remove_if(line.begin(), line.end(), ::isspace), line.end());
+        std::erase_if(line, ::isspace);
         if (line.empty() || line[0] == '#') continue;
 
         auto const delimiter_pos = line.find('=');
@@ -29,13 +29,13 @@ TapeDelays ConfigParser::parse(std::string const& config_path) {
         auto const key = line.substr(0, delimiter_pos);
         auto const value = line.substr(delimiter_pos + 1);
 
-        if (!isValidKey(key)) {
+        if (!IsValidKey(key)) {
             throw std::runtime_error("Invalid key: " + key);
         }
 
         try {
             auto ms_value = std::chrono::milliseconds(std::stoi(value));
-            setDelay(delays, key, ms_value);
+            SetDelay(delays, key, ms_value);
         } catch (...) {
             throw std::runtime_error("Invalid value for key: " + key + " on line " +
                                      std::to_string(line_num));
@@ -45,12 +45,12 @@ TapeDelays ConfigParser::parse(std::string const& config_path) {
     return delays;
 }
 
-constexpr bool ConfigParser::isValidKey(std::string const& key) noexcept {
-    return std::any_of(kValidKeys.begin(), kValidKeys.end(),
-                       [&key](char const* valid) { return key == valid; });
+constexpr bool ConfigParser::IsValidKey(std::string const& key) noexcept {
+    return std::ranges::any_of(kValidKeys,
+                               [&key](char const* valid) { return key == valid; });
 }
 
-void ConfigParser::setDelay(TapeDelays& delays, std::string const& key,
+void ConfigParser::SetDelay(TapeDelays& delays, std::string const& key,
                             std::chrono::milliseconds const& value) {
     if (key == "read_delay") delays.read_delay_ms_ = value;
     if (key == "write_delay") delays.write_delay_ms_ = value;

@@ -2,11 +2,12 @@
 
 #include <filesystem>
 #include <iostream>
+#include <utility>
 
 #include "tape.h"
 
-TmpTapeFactory::TmpTapeFactory(std::string const &dir_name, TapeDelays const &delays)
-    : dir_name_(dir_name), delays_(delays) {
+TmpTapeFactory::TmpTapeFactory(std::string dir_name, TapeDelays const &delays)
+    : dir_name_(std::move(dir_name)), delays_(delays) {
     std::filesystem::create_directories(dir_name_);
 }
 

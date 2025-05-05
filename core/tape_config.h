@@ -9,7 +9,7 @@ struct TapeDelays {
     std::chrono::milliseconds rewind_delay_ms_;
     std::chrono::milliseconds move_delay_ms_;
 
-    constexpr TapeDelays(std::chrono::milliseconds read = std::chrono::milliseconds(0),
+    constexpr explicit TapeDelays(std::chrono::milliseconds read = std::chrono::milliseconds(0),
                          std::chrono::milliseconds write = std::chrono::milliseconds(0),
                          std::chrono::milliseconds rewind = std::chrono::milliseconds(0),
                          std::chrono::milliseconds move = std::chrono::milliseconds(0))
@@ -21,10 +21,10 @@ struct TapeDelays {
 
 class ConfigParser {
 public:
-    static TapeDelays parse(std::string const& config_path);
+    static TapeDelays Parse(std::string const& config_path);
 
 private:
-    static constexpr bool isValidKey(std::string const& key) noexcept;
-    static void setDelay(TapeDelays& delays, std::string const& key,
+    static constexpr bool IsValidKey(std::string const& key) noexcept;
+    static void SetDelay(TapeDelays& delays, std::string const& key,
                          std::chrono::milliseconds const& value);
 };
