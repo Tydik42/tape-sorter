@@ -13,7 +13,7 @@ public:
 
 class TmpTapeFactory : public ITapeFactory {
 public:
-    TmpTapeFactory(std::string const& dir_name, TapeDelays const& delays);
+    TmpTapeFactory(std::string dir_name, TapeDelays const& delays);
 
     std::unique_ptr<ITape> Create() override;
     ~TmpTapeFactory() override;

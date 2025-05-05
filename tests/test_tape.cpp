@@ -1,8 +1,9 @@
-#include "tape.h"
-#include <gtest/gtest.h>
-#include <fstream>
 #include <filesystem>
+#include <fstream>
+#include <gtest/gtest.h>
 #include <vector>
+
+#include "tape.h"
 
 class TapeTest : public ::testing::Test {
 protected:
@@ -27,25 +28,21 @@ protected:
         }
     }
 
-    void createFileWithData(const std::vector<int32_t>& values) {
+    void createFileWithData(std::vector<int32_t> const& values) {
         std::ofstream ofs(test_file_, std::ios::binary);
-        for (const auto& val : values) {
-            ofs.write(reinterpret_cast<const char*>(&val), sizeof(val));
+        for (auto const& val : values) {
+            ofs.write(reinterpret_cast<char const*>(&val), sizeof(val));
         }
         ofs.close();
     }
 };
 
 TEST_F(TapeTest, ConstructorSuccess) {
-    EXPECT_NO_THROW({
-        Tape tape(test_file_, delays_);
-    });
+    EXPECT_NO_THROW({ Tape tape(test_file_, delays_); });
 }
 
 TEST_F(TapeTest, ConstructorFailure) {
-    EXPECT_THROW({
-        Tape tape("non_existent_file", delays_);
-    }, std::runtime_error);
+    EXPECT_THROW({ Tape tape("non_existent_file", delays_); }, std::runtime_error);
 }
 
 TEST_F(TapeTest, Read) {
@@ -145,17 +142,13 @@ TEST_F(TapeTest, MoveBackward) {
 TEST_F(TapeTest, MoveBackwardOutOfBounds) {
     Tape tape(test_file_, delays_);
 
-    EXPECT_THROW({
-        tape.Move(MoveDirection::kBackward);
-    }, std::out_of_range);
+    EXPECT_THROW({ tape.Move(MoveDirection::kBackward); }, std::out_of_range);
 }
 
 TEST_F(TapeTest, MoveForwardOutOfBounds) {
     Tape tape(test_file_, delays_);
 
-    EXPECT_THROW({
-        tape.Move(MoveDirection::kForward);
-    }, std::out_of_range);
+    EXPECT_THROW({ tape.Move(MoveDirection::kForward); }, std::out_of_range);
 }
 
 TEST_F(TapeTest, DelaysAreApplied) {

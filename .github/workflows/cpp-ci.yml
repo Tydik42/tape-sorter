@@ -2,6 +2,7 @@ name: C++ CI/CD
 
 on:
   push:
+    branches: [ main ]
   pull_request:
 
 jobs:
@@ -17,15 +18,16 @@ jobs:
 
       - name: Run clang-format
         run: |
-          find core -name "*.h" -o -name "*.cpp" | xargs clang-format --dry-run --Werror
-          clang-format --dry-run --Werror main.cpp
+          find core \( -name "*.h" -o -name "*.cpp" \) | xargs -r clang-format -style=file --dry-run --Werror
+          find tests \( -name "*.h" -o -name "*.cpp" \) | xargs -r clang-format -style=file --dry-run --Werror
+          find . -maxdepth 1 -name "*.cpp" -o -name "*.h" | xargs -r clang-format -style=file --dry-run --Werror
 
       - name: Run clang-tidy
         run: |
           mkdir -p build && cd build
           cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON ..
           cd ..
-          run-clang-tidy -p build
+          run-clang-tidy -p build -config-file=.clang-tidy
 
   build:
     name: Build (${{ matrix.os }})

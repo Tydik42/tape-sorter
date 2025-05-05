@@ -1,8 +1,9 @@
-#include <gtest/gtest.h>
 #include <filesystem>
 #include <fstream>
-#include "tmp_tape_factory.h"
+#include <gtest/gtest.h>
+
 #include "tape.h"
+#include "tmp_tape_factory.h"
 
 class TmpTapeFactoryTest : public testing::Test {
 protected:
@@ -16,15 +17,16 @@ protected:
     }
 
     std::filesystem::path test_dir_;
-    TapeDelays test_delays_{std::chrono::milliseconds(1), std::chrono::milliseconds(2), std::chrono::milliseconds(3)};
+    TapeDelays test_delays_{std::chrono::milliseconds(1), std::chrono::milliseconds(2),
+                            std::chrono::milliseconds(3)};
 };
 
-bool FileExists(const std::string& path) {
+bool FileExists(std::string const& path) {
     return std::filesystem::exists(path);
 }
 
 TEST_F(TmpTapeFactoryTest, ConstructorCreatesDirectory) {
-    const std::string new_dir = test_dir_.string() + "/new_subdir";
+    std::string const new_dir = test_dir_.string() + "/new_subdir";
     std::filesystem::remove_all(new_dir);
     TmpTapeFactory factory(new_dir, test_delays_);
 
@@ -33,11 +35,11 @@ TEST_F(TmpTapeFactoryTest, ConstructorCreatesDirectory) {
 
 TEST_F(TmpTapeFactoryTest, CreateReturnsTapeAndTracksFile) {
     TmpTapeFactory factory(test_dir_.string(), test_delays_);
-    const auto tape = factory.Create();
+    auto const tape = factory.Create();
 
     ASSERT_NE(tape, nullptr);
 
-    const bool has_files = !std::filesystem::is_empty(test_dir_);
+    bool const has_files = !std::filesystem::is_empty(test_dir_);
     EXPECT_TRUE(has_files);
 }
 
@@ -48,10 +50,8 @@ TEST_F(TmpTapeFactoryTest, GeneratesTapeNamesWithIncreasingCounter) {
     auto tape2 = factory.Create();
     auto tape3 = factory.Create();
 
-    const size_t file_count = std::distance(
-        std::filesystem::directory_iterator(test_dir_),
-        std::filesystem::directory_iterator{}
-    );
+    size_t const file_count = std::distance(std::filesystem::directory_iterator(test_dir_),
+                                            std::filesystem::directory_iterator{});
     EXPECT_EQ(file_count, 3);
 }
 
@@ -61,38 +61,31 @@ TEST_F(TmpTapeFactoryTest, DestructorRemovesFiles) {
         factory.Create();
         factory.Create();
 
-        const size_t file_count = std::distance(
-        std::filesystem::directory_iterator(test_dir_),
-        std::filesystem::directory_iterator{}
-        );
+        size_t const file_count = std::distance(std::filesystem::directory_iterator(test_dir_),
+                                                std::filesystem::directory_iterator{});
         EXPECT_EQ(file_count, 2);
     }
-    const size_t file_count = std::distance(
-        std::filesystem::directory_iterator(test_dir_),
-        std::filesystem::directory_iterator{}
-    );
+    size_t const file_count = std::distance(std::filesystem::directory_iterator(test_dir_),
+                                            std::filesystem::directory_iterator{});
     EXPECT_EQ(file_count, 0);
 }
 
 TEST_F(TmpTapeFactoryTest, CleanupTempFilesRemovesFiles) {
     class TestableFactory : public TmpTapeFactory {
     public:
-        using TmpTapeFactory::TmpTapeFactory;
         using TmpTapeFactory::CleanupTempFiles;
+        using TmpTapeFactory::TmpTapeFactory;
     };
+
     TestableFactory factory(test_dir_.string(), test_delays_);
     factory.Create();
     factory.Create();
-    size_t file_count = std::distance(
-        std::filesystem::directory_iterator(test_dir_),
-        std::filesystem::directory_iterator{}
-    );
+    size_t file_count = std::distance(std::filesystem::directory_iterator(test_dir_),
+                                      std::filesystem::directory_iterator{});
     EXPECT_EQ(file_count, 2);
 
     factory.CleanupTempFiles();
-    file_count = std::distance(
-        std::filesystem::directory_iterator(test_dir_),
-        std::filesystem::directory_iterator{}
-    );
+    file_count = std::distance(std::filesystem::directory_iterator(test_dir_),
+                               std::filesystem::directory_iterator{});
     EXPECT_EQ(file_count, 0);
 }
