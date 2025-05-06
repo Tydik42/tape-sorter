@@ -1,5 +1,6 @@
 #include "tape_sorter.h"
 
+#include <algorithm>
 #include <iostream>
 #include <queue>
 
