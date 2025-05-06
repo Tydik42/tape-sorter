@@ -14,20 +14,28 @@ void Tape::UpdatePosition() {
     tape_file_.seekp(current_position_);
 }
 
-int32_t Tape::Read(int32_t& value) {
+bool Tape::Read(int32_t& value) {
     std::this_thread::sleep_for(delays_.read_delay_ms_);
     if (!tape_file_.is_open()) {
         throw std::runtime_error("File is not open");
     }
 
+    if (current_position_ >= GetFileSize()) {
+        return false;
+    }
+
     tape_file_.seekg(current_position_);
     tape_file_.read(reinterpret_cast<char*>(&value), sizeof(value));
+
+    if (tape_file_.eof()) {
+        tape_file_.clear();
+        return false;
+    }
+
     if (tape_file_.gcount() != sizeof(value)) {
         throw std::runtime_error("Failed to read from file");
     }
-
-    UpdatePosition();
-    return value;
+    return true;
 }
 
 void Tape::Write(int32_t value) {
@@ -63,12 +71,11 @@ void Tape::Move(MoveDirection direction) {
         throw std::out_of_range("New position is out of bounds");
     }
 
-    tape_file_.seekg(0, std::ios::end);
-    std::streampos const file_size = tape_file_.tellg();
-    if (new_position > file_size) {
-        throw std::out_of_range("New position is out of bounds");
-    }
-
     current_position_ = new_position;
     UpdatePosition();
+}
+
+std::streampos Tape::GetFileSize() {
+    tape_file_.seekg(0, std::ios::end);
+    return tape_file_.tellg();
 }
