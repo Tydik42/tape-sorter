@@ -1,7 +1,6 @@
 #include "tape_sorter.h"
 
 #include <algorithm>
-#include <iostream>
 #include <queue>
 
 std::vector<std::unique_ptr<ITape>> TapeSorter::Split(ITape& input_tape) const {
@@ -73,7 +72,6 @@ void TapeSorter::Sort(ITape& input_tape, ITape& output_tape) const {
 
     input_tape.Rewind();
     auto tmp_tapes = Split(input_tape);
-    std::cout << tmp_tapes.size() << std::endl;
     if (tmp_tapes.empty()) {
         throw std::runtime_error("No temporary tapes created");
     }
