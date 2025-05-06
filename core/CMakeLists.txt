@@ -3,12 +3,14 @@ set(HEADERS
         i_tape.h
         tape.h
         tmp_tape_factory.h
+        tape_sorter.h
 )
 
 set(SOURCES
         tape_config.cpp
         tape.cpp
         tmp_tape_factory.cpp
+        tape_sorter.cpp
 )
 
 add_library(${PROJECT_NAME}-core ${HEADERS} ${SOURCES})
