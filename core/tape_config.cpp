@@ -21,7 +21,7 @@ TapeDelays ConfigParser::Parse(std::string const& config_path) {
     while (std::getline(file, line)) {
         line_num++;
         std::erase_if(line, ::isspace);
-        if (line.empty() || line[0] == '#') continue;
+        if (line.empty()) continue;
 
         auto const delimiter_pos = line.find('=');
         if (delimiter_pos == std::string::npos) continue;

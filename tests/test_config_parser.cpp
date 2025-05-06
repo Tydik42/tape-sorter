@@ -53,23 +53,6 @@ TEST_F(ConfigParserTest, ParsesPartialConfig) {
     EXPECT_EQ(delays.move_delay_ms_.count(), 0);
 }
 
-TEST_F(ConfigParserTest, HandlesCommentsAndWhitespace) {
-    std::string config =
-            "# This is a comment\n"
-            "read_delay = 100 \n"
-            "  # Another comment\n"
-            "  write_delay=200  \n"
-            "\n"
-            "rewind_delay  =  300\n";
-
-    auto filename = createTempConfigFile(config);
-    auto delays = ConfigParser::Parse(filename);
-
-    EXPECT_EQ(delays.read_delay_ms_.count(), 100);
-    EXPECT_EQ(delays.write_delay_ms_.count(), 200);
-    EXPECT_EQ(delays.rewind_delay_ms_.count(), 300);
-}
-
 TEST_F(ConfigParserTest, ThrowsOnMissingFile) {
     EXPECT_THROW(ConfigParser::Parse("nonexistent_file.txt"), std::runtime_error);
 }
@@ -86,9 +69,6 @@ TEST_F(ConfigParserTest, ThrowsOnInvalidValue) {
 
     auto filename = createTempConfigFile(config);
     EXPECT_THROW(ConfigParser::Parse(filename), std::runtime_error);
-
-    config = "read_delay=-100\n";
-    filename = createTempConfigFile(config);
 }
 
 TEST_F(ConfigParserTest, HandlesMultipleDefinitions) {

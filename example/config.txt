@@ -1,0 +1,4 @@
+read_delay=5
+write_delay=10
+rewind_delay=50
+move_delay=2
